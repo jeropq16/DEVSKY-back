@@ -42,7 +42,7 @@ app.get('/', (req, res) => res.send('Servidor de GMA funcionando'));
 
 const server = http.createServer(app);
 server.listen(PORT, () => {
-  console.log(`Servidor backend escuchando en http://localhost:${PORT}`);
+  console.log(`Servidor backend escuchando en http://t:${PORT}`);
 });
 
 initWebSocket(server);
