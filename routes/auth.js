@@ -3,6 +3,23 @@ import db from "../config/db.js";
 
 const router = express.Router();
 
+// Ruta de prueba GET
+router.get("/test", (req, res) => {
+  res.json({ message: "API de autenticación funcionando correctamente" });
+});
+
+// Ruta GET para login (solo informativa)
+router.get("/login", (req, res) => {
+  res.json({ 
+    message: "Endpoint de login - Usar método POST", 
+    example: {
+      method: "POST",
+      url: "/api/auth/login",
+      body: { email: "usuario@ejemplo.com", password: "contraseña" }
+    }
+  });
+});
+
 // Login
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;

@@ -40,9 +40,28 @@ app.use('/api/pdf', pdfRoutes);
 
 app.get('/', (req, res) => res.send('Servidor de GMA funcionando'));
 
+// Ruta de estado de la API
+app.get('/api/status', (req, res) => {
+  res.json({
+    status: 'OK',
+    message: 'Servidor funcionando correctamente',
+    timestamp: new Date().toISOString(),
+    endpoints: [
+      '/api/auth/login (POST)',
+      '/api/auth/test (GET)',
+      '/api/usuarios',
+      '/api/aeronaves',
+      '/api/ordenes',
+      '/api/notificaciones',
+      '/api/reportes',
+      '/api/pdf'
+    ]
+  });
+});
+
 const server = http.createServer(app);
 server.listen(PORT, () => {
-  console.log(`Servidor backend escuchando en http://t:${PORT}`);
+  console.log(`Servidor backend escuchando en http://localhost:${PORT}`);
 });
 
 initWebSocket(server);
