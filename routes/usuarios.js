@@ -1,13 +1,13 @@
 // backend/routes/usuarios.js
 import { Router } from "express";
-import pool from "../config/db.js";
+import db from "../config/db.js";
 
 const router = Router();
 
 // ✅ Obtener todos los usuarios
 router.get("/", async (req, res) => {
   try {
-    const [rows] = await pool.query(
+    const [rows] = await db.query(
       "SELECT id, nombre, email, rol_id FROM usuarios"
     );
     res.json({ success: true, usuarios: rows });
@@ -22,7 +22,7 @@ router.get("/", async (req, res) => {
 // ✅ Obtener técnicos (usuarios con rol_id = 2)
 router.get("/tecnicos", async (req, res) => {
   try {
-    const [rows] = await pool.query(
+    const [rows] = await db.query(
       "SELECT id, nombre, email FROM usuarios WHERE rol_id = 2"
     );
     res.json({ success: true, tecnicos: rows });
@@ -45,7 +45,7 @@ router.post("/", async (req, res) => {
         .json({ success: false, message: "Faltan datos" });
     }
 
-    const [result] = await pool.query(
+    const [result] = await db.query(
       "INSERT INTO usuarios (nombre, email, password, rol_id) VALUES (?, ?, ?, ?)",
       [nombre, email, password, rol_id]
     );
