@@ -59,12 +59,17 @@ app.get('/api/status', (req, res) => {
   });
 });
 
-const server = http.createServer(app);
-server.listen(PORT, () => {
-  console.log(`Servidor backend escuchando en http://localhost:${PORT}`);
-});
+// Solo inicializar el servidor si no estamos en Vercel
+if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+  const server = http.createServer(app);
+  server.listen(PORT, () => {
+    console.log(`Servidor backend escuchando en http://localhost:${PORT}`);
+  });
+  initWebSocket(server);
+}
 
-initWebSocket(server);
+// Exportar la app para Vercel
+export default app;
 
 (async () => {
   try {
