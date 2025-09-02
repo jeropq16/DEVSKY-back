@@ -45,9 +45,7 @@ app.use(express.json()); // To handle JSON in requests
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Crear directorio de PDFs si no existe
-const pdfDir = path.join(process.cwd(), 'pdfs');
-if (!fs.existsSync(pdfDir)) fs.mkdirSync(pdfDir);
+// Los PDFs se generan en memoria, no necesitamos crear directorio
 
 // Servir archivos estáticos del frontend si existe
 const frontendPath = path.join(process.cwd(), 'frontend');
