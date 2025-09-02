@@ -40,23 +40,43 @@ app.use('/api/pdf', pdfRoutes);
 
 app.get('/', (req, res) => res.send('Servidor de GMA funcionando'));
 
-// Ruta de estado de la API
-app.get('/api/status', (req, res) => {
+// Ruta de salud simple (sin base de datos)
+app.get('/health', (req, res) => {
   res.json({
     status: 'OK',
     message: 'Servidor funcionando correctamente',
     timestamp: new Date().toISOString(),
-    endpoints: [
-      '/api/auth/login (POST)',
-      '/api/auth/test (GET)',
-      '/api/usuarios',
-      '/api/aeronaves',
-      '/api/ordenes',
-      '/api/notificaciones',
-      '/api/reportes',
-      '/api/pdf'
-    ]
+    environment: process.env.NODE_ENV || 'development'
   });
+});
+
+// Ruta de estado de la API (con verificación de base de datos)
+app.get('/api/status', async (req, res) => {
+  try {
+    const dbStatus = await testDatabaseConnection();
+    res.json({
+      status: 'OK',
+      message: 'Servidor funcionando correctamente',
+      timestamp: new Date().toISOString(),
+      database: dbStatus ? 'Connected' : 'Disconnected',
+      endpoints: [
+        '/api/auth/login (POST)',
+        '/api/auth/test (GET)',
+        '/api/usuarios',
+        '/api/aeronaves',
+        '/api/ordenes',
+        '/api/notificaciones',
+        '/api/reportes',
+        '/api/pdf'
+      ]
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 'ERROR',
+      message: 'Error verificando estado del servidor',
+      error: error.message
+    });
+  }
 });
 
 // Solo inicializar el servidor si no estamos en Vercel
@@ -68,15 +88,23 @@ if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
   initWebSocket(server);
 }
 
-// Exportar la app para Vercel
-export default app;
-
-(async () => {
+// Función para verificar la conexión a la base de datos
+async function testDatabaseConnection() {
   try {
     const conn = await pool.getConnection();
     console.log('✅ Conectado a MySQL correctamente');
     conn.release();
+    return true;
   } catch (err) {
     console.error('❌ Error de conexión a MySQL:', err.message);
+    return false;
   }
-})();
+}
+
+// Solo probar la conexión si no estamos en Vercel
+if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+  testDatabaseConnection();
+}
+
+// Exportar la app para Vercel
+export default app;
