@@ -25,15 +25,7 @@ const PORT = process.env.PORT || 3000;
 
 // Configuración de CORS - DEBE IR ANTES DE TODO
 const corsOptions = {
-    origin: [
-        'https://devsky-back.vercel.app',
-        'https://devsky-back-erb8td21v-sebitasdowns-projects.vercel.app',
-        'http://localhost:3000',
-        'http://localhost:5173',
-        'http://localhost:4173',
-        'http://127.0.0.1:5173',
-        'http://127.0.0.1:4173'
-    ],
+    origin: true, // Permite cualquier origen (solo para desarrollo)
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'x-auth-token', 'Origin', 'Accept'],
     credentials: true,
