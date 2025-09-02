@@ -3,18 +3,18 @@ import http from 'http';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import fs from 'fs';
-import pool from './config/db.js';
+import pool from '../config/db.js';
 import dotenv from 'dotenv';
 dotenv.config();
 
-import authRoutes from './routes/auth.js';
-import usuariosRoutes from './routes/usuarios.js';
-import aeronavesRoutes from './routes/aeronaves.js';
-import ordenesRoutes from './routes/ordenes.js';
-import notificacionesRoutes from './routes/notificaciones.js';
-import reportesRoutes from './routes/reportes.js';
-import pdfRoutes from './routes/pdf.js';
-import { initWebSocket } from './websocket.js';
+import authRoutes from '../routes/auth.js';
+import usuariosRoutes from '../routes/usuarios.js';
+import aeronavesRoutes from '../routes/aeronaves.js';
+import ordenesRoutes from '../routes/ordenes.js';
+import notificacionesRoutes from '../routes/notificaciones.js';
+import reportesRoutes from '../routes/reportes.js';
+import pdfRoutes from '../routes/pdf.js';
+import { initWebSocket } from '../websocket.js';
 import path from 'path';
 
 const app = express();
@@ -106,5 +106,9 @@ if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
   testDatabaseConnection();
 }
 
-// Exportar la app para Vercel
+// Importar serverless-http
+import serverless from 'serverless-http';
+
+// Exportar como handler para Vercel
+export const handler = serverless(app);
 export default app;
